@@ -1,6 +1,6 @@
 package graph_bfs
 
-import "template/src/graph"
+import "coderun/v1/graph"
 
 type GraphAdjacencyList struct {
 	adjacency [][]int

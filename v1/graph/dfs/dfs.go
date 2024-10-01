@@ -1,6 +1,6 @@
 package graph_dfs
 
-import "template/src/graph"
+import "coderun/v1/graph"
 
 type GraphAdjacencyList[V graph.Vertex] struct {
 	adjacency [][]V
