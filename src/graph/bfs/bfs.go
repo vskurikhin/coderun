@@ -1,8 +1,10 @@
 package graph_bfs
 
+import "template/src/graph"
+
 type GraphAdjacencyList struct {
 	adjacency [][]int
-	color     []string
+	color     []graph.Color
 	distance  []int
 	previous  []int
 }
@@ -10,7 +12,7 @@ type GraphAdjacencyList struct {
 func New(capacity int) GraphAdjacencyList {
 	return GraphAdjacencyList{
 		adjacency: make([][]int, capacity),
-		color:     make([]string, capacity),
+		color:     make([]graph.Color, capacity),
 		distance:  make([]int, capacity),
 		previous:  make([]int, capacity),
 	}
@@ -24,46 +26,22 @@ func (g *GraphAdjacencyList) AddEdge(u, v int) {
 	g.adjacency[u] = append(g.adjacency[u], v)
 }
 
-func (g *GraphAdjacencyList) growAdjacency(u int) {
-	for i := len(g.adjacency); i < (u + 1); i++ {
-		g.adjacency = append(g.adjacency, []int{})
-	}
-}
-
-func (g *GraphAdjacencyList) growColor(u int) {
-	for i := len(g.color); i < (u + 1); i++ {
-		g.color = append(g.color, "")
-	}
-}
-
-func (g *GraphAdjacencyList) growPrevious(u int) {
-	for i := len(g.previous); i < (u + 1); i++ {
-		g.previous = append(g.previous, 0)
-	}
-}
-
-func (g *GraphAdjacencyList) growDistance(u int) {
-	for i := len(g.distance); i < (u + 1); i++ {
-		g.distance = append(g.distance, 0)
-	}
-}
-
 func (g *GraphAdjacencyList) BFS(s int) {
 	planned := []int{s}
-	g.color[s] = "gray"
+	g.color[s] = graph.Gray
 	g.distance[s] = 0
 	for len(planned) > 0 {
 		u := planned[0]
 		planned = planned[1:]
 		for _, v := range g.adjacency[u] {
-			if g.color[v] == "" {
+			if g.color[v] == 0 {
 				g.distance[v] = g.distance[u] + 1
 				g.previous[v] = u
-				g.color[v] = "gray"
+				g.color[v] = graph.Gray
 				planned = append(planned, v)
 			}
 		}
-		g.color[u] = "black"
+		g.color[u] = graph.Black
 	}
 }
 
@@ -78,4 +56,28 @@ func (g *GraphAdjacencyList) ShortestPath(v int) []int {
 		path[i], path[j] = path[j], path[i]
 	}
 	return path
+}
+
+func (g *GraphAdjacencyList) growAdjacency(u int) {
+	for i := len(g.adjacency); i < (u + 1); i++ {
+		g.adjacency = append(g.adjacency, []int{})
+	}
+}
+
+func (g *GraphAdjacencyList) growColor(u int) {
+	for i := len(g.color); i < (u + 1); i++ {
+		g.color = append(g.color, 0)
+	}
+}
+
+func (g *GraphAdjacencyList) growPrevious(u int) {
+	for i := len(g.previous); i < (u + 1); i++ {
+		g.previous = append(g.previous, 0)
+	}
+}
+
+func (g *GraphAdjacencyList) growDistance(u int) {
+	for i := len(g.distance); i < (u + 1); i++ {
+		g.distance = append(g.distance, 0)
+	}
 }
